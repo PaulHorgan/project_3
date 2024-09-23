@@ -49,7 +49,7 @@ const Cart = () => {
         });
         console.log(response);
         if (response.status === 200) {
-            alert('Payment successful!');
+            // alert('Payment sjdfkasdfk!');
             handleCheckout(); // Proceed with checkout logic
         }
     } catch (error) {
