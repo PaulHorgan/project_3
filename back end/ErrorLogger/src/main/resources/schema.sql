@@ -1,0 +1,12 @@
+SET FOREIGN_KEY_CHECKS = 0;
+
+DROP TABLE IF EXISTS `issues` CASCADE;
+
+CREATE TABLE `issues` (
+    `id` INTEGER PRIMARY KEY AUTO_INCREMENT,
+    `description` VARCHAR(255) ,
+    `location` VARCHAR(255),
+    `status` VARCHAR(255)
+  );
+
+  SET FOREIGN_KEY_CHECKS = 1;
