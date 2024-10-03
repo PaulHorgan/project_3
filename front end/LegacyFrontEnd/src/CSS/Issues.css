@@ -1,0 +1,17 @@
+.filler {
+    height: 300px; /* Adjust this height to match the height of your navbar */
+  }
+  
+ 
+  
+  .issues-table {
+    padding-top: 20px; /* Optional padding to space out the table from the form */
+  }
+  
+  /* Optionally, you can use a margin instead of padding */
+  
+
+  .body {
+    border-left: 10%;
+    border-right: 10%;
+  }

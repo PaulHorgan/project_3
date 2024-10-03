@@ -31,6 +31,7 @@ const Navbar = () => {
         <h1>SAHARA</h1>
         <div className="navbar-links">
           <Link to="/">HOME</Link>
+          <Link to="/Issues">Log a Fault</Link>
           {isAuthenticated ? (
             <div className="navbar-right">
               {isAdmin && (

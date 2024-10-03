@@ -1,0 +1,13 @@
+package com.legacy.demo;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
+
+@Configuration
+public class IssueServiceConfig {
+
+    @Bean
+    public RestTemplate restTemplate() {return new RestTemplate();}
+
+}
