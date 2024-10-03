@@ -1,3 +1,4 @@
+
 package com.legacy.demo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,16 +10,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
-<<<<<<< HEAD
-=======
-import org.springframework.test.web.servlet.ResultMatcher;
->>>>>>> 227fae3b1f54b7920dc20d57c499849fc6d09f90
+
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-<<<<<<< HEAD
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = {"classpath:schema.sql"})
 public class IssueTests {
 
@@ -30,7 +27,8 @@ public class IssueTests {
 
     @Test
     void createIssue() throws Exception{
-        Issue newIssue = new Issue(1,  "new issue","Not from sql", "logged");
+       Issue newIssue = new Issue(1,  "new issue","Not from sql", "logged");
+
         String newItemAsJson = this.mapper.writeValueAsString(newIssue);
 
         RequestBuilder mockRequest = MockMvcRequestBuilders
@@ -47,12 +45,11 @@ public class IssueTests {
 
     }
 
+
     @Test
     void getAllTest() throws Exception{
 
     }
-
-
 
 
 }
