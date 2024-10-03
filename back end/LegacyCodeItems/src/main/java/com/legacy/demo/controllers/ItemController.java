@@ -45,7 +45,6 @@ public class ItemController {
     public ResponseEntity<?> updateItem(@PathVariable Integer id, @RequestBody Item itemUpdate) {
         return this.service.ItemUpdate(id, itemUpdate.getName(), itemUpdate.getPrice(), itemUpdate.getQuantity(), itemUpdate.getImageUrl());
     }
-
     // Endpoint to reserve stock
     @PostMapping("/reserve/{id}")
     public ResponseEntity<?> reserveStock(@PathVariable Integer id, @RequestBody Map<String, Integer> request) {
@@ -58,5 +57,6 @@ public class ItemController {
     public ResponseEntity<?> releaseStock(@PathVariable Integer id, @RequestBody Map<String, Integer> request) {
         Integer quantity = request.get("quantity");
         return this.service.releaseStock(id, quantity);
+
     }
 }

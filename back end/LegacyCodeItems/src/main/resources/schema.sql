@@ -1,0 +1,13 @@
+SET FOREIGN_KEY_CHECKS = 0;
+
+DROP TABLE IF EXISTS `item` CASCADE;
+
+CREATE TABLE `item` (
+    `id` INTEGER PRIMARY KEY AUTO_INCREMENT,
+    `name` VARCHAR(255) ,
+    `price` DOUBLE,
+    `quantity` INTEGER,
+    `image_url` VARCHAR(255)
+  );
+
+  SET FOREIGN_KEY_CHECKS = 1;

@@ -45,10 +45,10 @@ public class ItemService {
         Optional<Item> optionalItem = repo.findById(id);
         if (optionalItem.isPresent()) {
             Item item = optionalItem.get();
-            item.setName(name);
-            item.setPrice(price);
-            item.setQuantity(quantity);
-            item.setImageUrl(imageUrl);
+            if (name != null) item.setName(name);
+            if (price != null) item.setPrice(price);
+            if (quantity != null) item.setQuantity(quantity);
+            if (imageUrl != null) item.setImageUrl(imageUrl);
             repo.save(item);
             return ResponseEntity.ok(item);
         } else {
