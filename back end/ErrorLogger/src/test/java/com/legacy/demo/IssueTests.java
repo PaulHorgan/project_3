@@ -9,11 +9,16 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
+<<<<<<< HEAD
+=======
+import org.springframework.test.web.servlet.ResultMatcher;
+>>>>>>> 227fae3b1f54b7920dc20d57c499849fc6d09f90
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+<<<<<<< HEAD
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = {"classpath:schema.sql"})
 public class IssueTests {
 
