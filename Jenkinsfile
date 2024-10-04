@@ -1,82 +1,96 @@
 pipeline {
     agent any
-    environment {
-        NODE_HOME = '/usr/local/bin/node' //
-        MAVEN_HOME = '/usr/local/bin/mvn' // Adjust to your maven path
-//         DEPLOY_USER = credentials('DEPLOY_CREDENTIALS_USER') // Jenkins credentials for SSH
-//         DEPLOY_PASSWORD = credentials('DEPLOY_CREDENTIALS_PASSWORD')
-        MYSQL_HOST = "localhost"
-        MYSQL_USER = 'root'
-        MYSQL_PASSWORD = 'root'
 
-    }
     stages {
-        // Front end build and deployment using PM2 to run persistently
-        stage('Build and Run Front End with PM2') {
+        stage('Build Frontend') {
             steps {
-                dir('front end/LegacyFrontEnd') {
-                    echo 'Building and deploying Front End (React app)'
+                dir('Frontend/LegacyFrontEnd') {
                     bat '''
                     npm install
                     npm run build
-                    pm2 delete LegacyFrontEnd || true
+                    pm2 delete LegacyFrontEnd || exit 0
                     pm2 start npm --name "LegacyFrontEnd" -- start
                     '''
-                    // The Front end React app is started using PM2, so it keeps running even after the pipeline completes.
                 }
             }
         }
 
-        // Back end: Build and deploy the Items service, run persistently using PM2
-        stage('Build and Run Items Service with PM2') {
+        stage('Build Items') {
             steps {
-                dir('back end/LegacyCodeItems') {
-                    echo 'Building Items service using Maven'
+                dir('Backend/LegacyCodeItems') {
+                    echo 'Installing Items'
                     bat '''
                     mvn clean install
-                    pm2 delete LegacyCodeItems || true
-                    pm2 start java --name "LegacyCodeItems" -- -jar target/LegacyCodeItems-app.jar
-                    '''
-
-                }
-            }
-        }
-
-        // Back end: Build and deploy the Cart service, run persistently using PM2
-        stage('Build and Run Cart Service with PM2') {
-            steps {
-                dir('back-end/LegacyCodeCart') {
-                    echo 'Building Cart service using Maven'
-                    bat '''
-                    mvn clean install
-                    pm2 delete LegacyCodeCart || true
-                    pm2 start java --name "LegacyCodeCart" -- -jar target/LegacyCodeCart-app.jar
                     '''
                 }
             }
         }
 
-        // Back end: Build and deploy the Payments service, run persistently using PM2
-        stage('Build and Run Payments Service with PM2') {
+        stage('Build Cart') {
             steps {
-                dir('back-end/stripe-payment') {
-                    echo 'Building Payments service using Maven'
+                dir('Backend/LegacyCodeCart') {
+                    echo 'Installing Cart'
                     bat '''
                     mvn clean install
-                    pm2 delete stripe-payment || true
+                    '''
+                }
+            }
+        }
+
+        stage('Build Stripe') {
+            steps {
+                dir('Backend/stripe-payment') {
+                    echo 'Installing stripe-payment'
+                    bat '''
+                    mvn clean install
+                    pm2 delete stripe-payment || exit 0
                     pm2 start java --name "stripe-payment" -- -jar target/stripe-payment-app.jar
                     '''
                 }
             }
         }
-    }
-    post {
-        always {
-            echo 'Cleaning up workspace...'
-            cleanWs()
+
+        stage('Test') {
+            steps {
+                dir('Backend/LegacyCodeItems') {
+                    bat 'mvn test'
+                }
+                dir('Backend/LegacyCodeCart') {
+                    bat 'mvn test'
+                }
+                dir('Backend/stripe-payment') {
+                    bat 'mvn test'
+                }
+            }
         }
-        failure {
-            echo 'Build failed. Check the logs.'
+
+        stage('Deploy to Testing') {
+            steps {
+                echo 'Deploying to Testing Environment'
+                bat '''
+                if not exist C:\\Users\\User\\Desktop\\Project2TESTEnv\\ (mkdir C:\\Users\\User\\Desktop\\Project2TESTEnv\\)
+                if not exist C:\\Users\\User\\Desktop\\Project2TESTEnv\\backend (mkdir C:\\Users\\User\\Desktop\\Project2TESTEnv\\backend)
+                xcopy Frontend\\LegacyFrontEnd\\build C:\\Users\\User\\Desktop\\Project2TESTEnv\\frontend /E /I /Y || echo xcopy failed
+                xcopy Backend\\LegacyCodeItems\\target\\*.jar C:\\Users\\User\\Desktop\\Project2TESTEnv\\backend /Y || echo xcopy failed
+                xcopy Backend\\LegacyCodeCart\\target\\*.jar C:\\Users\\User\\Desktop\\Project2TESTEnv\\backend /Y || echo xcopy failed
+                xcopy Backend\\stripe-payment\\target\\*.jar C:\\Users\\User\\Desktop\\Project2TESTEnv\\backend /Y || echo xcopy failed
+                '''
+            }
+        }
+
+        stage('Deploy to Production') {
+            steps {
+                input message: 'Deploy to Production?', ok: 'Deploy'
+                echo 'Deploying to Production Environment'
+                bat '''
+                if not exist C:\\Users\\User\\Desktop\\Project2PRODEnv\\ (mkdir C:\\Users\\User\\Desktop\\Project2PRODEnv\\)
+                if not exist C:\\Users\\User\\Desktop\\Project2PRODEnv\\backend (mkdir C:\\Users\\User\\Desktop\\Project2PRODEnv\\backend)
+                xcopy Frontend\\LegacyFrontEnd\\build C:\\Users\\User\\Desktop\\Project2PRODEnv\\frontend /E /I /Y || echo xcopy failed
+                xcopy Backend\\LegacyCodeItems\\target\\*.jar C:\\Users\\User\\Desktop\\Project2PRODEnv\\backend /Y || echo xcopy failed
+                xcopy Backend\\LegacyCodeCart\\target\\*.jar C:\\Users\\User\\Desktop\\Project2PRODEnv\\backend /Y || echo xcopy failed
+                xcopy Backend\\stripe-payment\\target\\*.jar C:\\Users\\User\\Desktop\\Project2PRODEnv\\backend /Y || echo xcopy failed
+                '''
+            }
         }
     }
 }

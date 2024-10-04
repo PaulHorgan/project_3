@@ -16,3 +16,8 @@ body {
   display: flex;
   flex-direction: column;
 }
+
+
+.filler {
+  height: 150px; /* Adjust this height to match the height of your navbar */
+}

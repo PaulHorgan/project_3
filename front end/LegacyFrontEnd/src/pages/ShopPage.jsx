@@ -17,6 +17,8 @@ const ShopPage = () => {
     console.log('shop Render - IsAuthenticated:', isAuthenticated);
     console.log('shop Render - IsAdmin:', isAdmin);
     return (
+        <div>
+        <div className="filler"></div>
         <div className="main-container">
             <div className="cart-container card">
                 <Cart cart={cartItems} />
@@ -25,6 +27,7 @@ const ShopPage = () => {
             <div className="card">
                 <ItemCard2 items={items} addToCart={addToCart} />
             </div>
+        </div>
         </div>
     );
 };
