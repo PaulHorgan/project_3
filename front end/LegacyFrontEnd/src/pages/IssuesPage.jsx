@@ -68,7 +68,7 @@ function IssuesPage() {
 
   return (
     <div className='body'>
-      <div className='filler'></div>
+      <div className='fillerIssues'></div>
 {/* Form to add new issue */}
 <div className="add-issue-form">
         <h2>Add New Issue - Please check if your issue is already known below </h2>
